@@ -4,66 +4,47 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>画像と動画を自動でウィンドウで表示</title>
-<style>
-    .rotating {
-        animation: rotation 2s infinite linear;
-    }
-
-    @keyframes rotation {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-</style>
 <script>
 let openedImages = 0;
 let closeCount = 0;
 let videoWindow;
-let imageUrls = [
-    'https://cdn-ak.f.st-hatena.com/images/fotolife/k/kill-666/20120418/20120418222938.jpg',
-    'https://www.sokagakkai.jp/assets/img/philosophy/img-3-18-3-1.jpg',
-    'https://cdn.mainichi.jp/vol1/2024/01/30/20240130k0000m040190000p/9.jpg?1'
-];
 
-function openImages(count) {
-    for (let i = 0; i < count; i++) {
-        let imgWindow = window.open('', '_blank', 'width=400,height=400,left=' + (openedImages * 10) + ',top=' + (100 + (openedImages % 10) * 10));
-        imgWindow.document.write('<html><head><title>Image</title><style>.rotating { animation: rotation 2s infinite linear; } @keyframes rotation { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }</style></head><body><img src="' + imageUrls[i % imageUrls.length] + '" class="rotating" style="width:100%; height:auto;"></body></html>');
-        openedImages++;
-    }
+function openImages(count, imageUrl) {
+for (let i = 0; i < count; i++) {
+window.open(imageUrl, '_blank', 'width=400,height=400,left=' + (openedImages * 10) + ',top=' + (100 + (openedImages % 10) * 10));
+openedImages++;
+}
 }
 
 function openYouTubeVideo() {
-    videoWindow = window.open('https://www.youtube.com/watch?v=XWrvbDkmatw', '_blank', 'width=800,height=600');
+videoWindow = window.open('https://www.youtube.com/watch?v=XWrvbDkmatw', '_blank', 'width=800,height=600');
 }
 
 window.onload = function() {
-    setTimeout(function() {
-        openImages(10); // 10枚の画像を開く
-        openYouTubeVideo();
-    }, 1000);
+setTimeout(function() {
+openImages(100, 'https://cdn-ak.f.st-hatena.com/images/fotolife/k/kill-666/20120418/20120418222938.jpg');
+openImages(50, 'https://www.sokagakkai.jp/assets/img/philosophy/img-3-18-3-1.jpg');
+openYouTubeVideo();
+}, 1000);
 
-    // 1分半後に新しい画像を30枚表示
-    setTimeout(function() {
-        openImages(30);
-    }, 90000); // 90,000ミリ秒 = 1分半
+// 1分半後に新しい画像を30枚表示
+setTimeout(function() {
+openImages(30, 'https://cdn.mainichi.jp/vol1/2024/01/30/20240130k0000m040190000p/9.jpg?1');
+}, 90000); // 90,000ミリ秒 = 1分半
 };
 
 window.onbeforeunload = function() {
-    closeCount++;
-    if (closeCount >= 10 && videoWindow) {
-        videoWindow.close();
-    }
+closeCount++;
+if (closeCount >= 10 && videoWindow) {
+videoWindow.close();
+}
 };
 
 window.addEventListener('focus', function() {
-    if (closeCount > 0 && closeCount < 10) {
-        openYouTubeVideo();
-        closeCount = 0;
-    }
+if (closeCount > 0 && closeCount < 10) {
+openYouTubeVideo();
+closeCount = 0;
+}
 });
 </script>
 </head>
